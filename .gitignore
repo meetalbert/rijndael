@@ -13,5 +13,5 @@ sdist/
 wheels/
 .installed.cfg
 .cache/*
-
+.idea
 venv/*
