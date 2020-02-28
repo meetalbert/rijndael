@@ -36,8 +36,8 @@ import string
 #2.4.....
 import os
 if os.name != "java":
-    import exceptions
-    if hasattr(exceptions, "FutureWarning"):
+    import builtins
+    if hasattr(builtins, "FutureWarning"):
         import warnings
         warnings.filterwarnings("ignore", category=FutureWarning, append=1)
 #-----------------------
