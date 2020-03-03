@@ -7,7 +7,7 @@ def number2string(i):
     s=hex(i)[2:].rstrip('L')
     if len(s) % 2:
         s = '0' + s
-    return s.decode('hex')
+    return bytes.fromhex(s).decode('utf-8')
 
 def number2string_N(i, N):
     """Convert a number to a string of fixed size
@@ -17,7 +17,7 @@ def number2string_N(i, N):
     Output: string (big-endian)
     """
     s = '%0*x' % (N*2, i)
-    return s.decode('hex')
+    return bytes.fromhex(s).decode('utf-8')
 
 def string2number(i):
     """ Convert a string to a number
@@ -25,7 +25,7 @@ def string2number(i):
     Input: string (big-endian)
     Output: long or integer
     """
-    return int(i.encode('hex'),16)
+    return int(i.encode('utf-8').hex(), 16)
 
 def xorstring(a,b):
     """XOR two strings of same length
@@ -46,9 +46,10 @@ class Counter(str):
     def __init__(self, initial_ctr):
         if not isinstance(initial_ctr, str):
             raise TypeError("nonce must be str")
-        self.c = int(initial_ctr.encode('hex'), 16)
+        self.c = int(initial_ctr.encode('hex_codec'), 16)
     def __call__(self):
         # This might be slow, but it works as a demonstration
-        ctr = ("%032x" % (self.c,)).decode('hex')
+        ctr = ("%032x" % (self.c,))
+        ctr = bytes.fromhex(ctr).decode('utf-8')
         self.c += 1
         return ctr

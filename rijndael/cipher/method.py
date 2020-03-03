@@ -27,9 +27,6 @@ If any strings are of the wrong length a ValueError is thrown
 # deleting all the comments and renaming all the variables
 
 import copy
-import string
-
-
 
 #-----------------------
 #TREV - ADDED BECAUSE THERE'S WARNINGS ABOUT INT OVERFLOW BEHAVIOR CHANGING IN
@@ -237,8 +234,8 @@ class rijndael:
         t = 0
         j = 0
         while j < KC and t < ROUND_KEY_COUNT:
-            Ke[t / BC][t % BC] = tk[j]
-            Kd[ROUNDS - (t / BC)][t % BC] = tk[j]
+            Ke[t // BC][t % BC] = tk[j]
+            Kd[ROUNDS - (t // BC)][t % BC] = tk[j]
             j += 1
             t += 1
         tt = 0
@@ -256,20 +253,20 @@ class rijndael:
                 for i in range(1, KC):
                     tk[i] ^= tk[i-1]
             else:
-                for i in range(1, KC / 2):
+                for i in range(1, KC // 2):
                     tk[i] ^= tk[i-1]
-                tt = tk[KC / 2 - 1]
-                tk[KC / 2] ^= (S[ tt        & 0xFF] & 0xFF)       ^ \
+                tt = tk[KC // 2 - 1]
+                tk[KC // 2] ^= (S[ tt        & 0xFF] & 0xFF)       ^ \
                               (S[(tt >>  8) & 0xFF] & 0xFF) <<  8 ^ \
                               (S[(tt >> 16) & 0xFF] & 0xFF) << 16 ^ \
                               (S[(tt >> 24) & 0xFF] & 0xFF) << 24
-                for i in range(KC / 2 + 1, KC):
+                for i in range(KC // 2 + 1, KC):
                     tk[i] ^= tk[i-1]
             # copy values into round key arrays
             j = 0
             while j < KC and t < ROUND_KEY_COUNT:
-                Ke[t / BC][t % BC] = tk[j]
-                Kd[ROUNDS - (t / BC)][t % BC] = tk[j]
+                Ke[t // BC][t % BC] = tk[j]
+                Kd[ROUNDS - (t // BC)][t % BC] = tk[j]
                 j += 1
                 t += 1
         # inverse MixColumn where needed
@@ -324,7 +321,7 @@ class rijndael:
             result.append((S[(t[(i + s1) % BC] >> 16) & 0xFF] ^ (tt >> 16)) & 0xFF)
             result.append((S[(t[(i + s2) % BC] >>  8) & 0xFF] ^ (tt >>  8)) & 0xFF)
             result.append((S[ t[(i + s3) % BC]        & 0xFF] ^  tt       ) & 0xFF)
-        return string.join(map(chr, result), '')
+        return ''.join(map(chr, result))
 
     def decrypt(self, ciphertext):
         if len(ciphertext) != self.block_size:
@@ -367,7 +364,7 @@ class rijndael:
             result.append((Si[(t[(i + s1) % BC] >> 16) & 0xFF] ^ (tt >> 16)) & 0xFF)
             result.append((Si[(t[(i + s2) % BC] >>  8) & 0xFF] ^ (tt >>  8)) & 0xFF)
             result.append((Si[ t[(i + s3) % BC]        & 0xFF] ^  tt       ) & 0xFF)
-        return string.join(map(chr, result), '')
+        return ''.join(map(chr, result))
 
 def encrypt(key, block):
     return rijndael(key, len(block)).encrypt(block)
