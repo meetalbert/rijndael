@@ -219,13 +219,13 @@ class rijndael:
         self.block_size = block_size
 
         ROUNDS = num_rounds[len(key)][block_size]
-        BC = block_size / 4
+        BC = block_size // 4
         # encryption round keys
         Ke = [[0] * BC for i in range(ROUNDS + 1)]
         # decryption round keys
         Kd = [[0] * BC for i in range(ROUNDS + 1)]
         ROUND_KEY_COUNT = (ROUNDS + 1) * BC
-        KC = len(key) / 4
+        KC = len(key) // 4
 
         # copy user material bytes into temporary ints
         tk = []
@@ -288,7 +288,7 @@ class rijndael:
             raise ValueError('wrong block length, expected ' + str(self.block_size) + ' got ' + str(len(plaintext)))
         Ke = self.Ke
 
-        BC = self.block_size / 4
+        BC = self.block_size // 4
         ROUNDS = len(Ke) - 1
         if BC == 4:
             SC = 0
@@ -331,7 +331,7 @@ class rijndael:
             raise ValueError('wrong block length, expected ' + str(self.block_size) + ' got ' + str(len(ciphertext)))
         Kd = self.Kd
 
-        BC = self.block_size / 4
+        BC = self.block_size // 4
         ROUNDS = len(Kd) - 1
         if BC == 4:
             SC = 0
